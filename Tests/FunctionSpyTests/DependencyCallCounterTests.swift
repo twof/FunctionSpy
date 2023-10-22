@@ -79,6 +79,17 @@ final class FunctionSpyTests: XCTestCase {
     XCTExpectFailure("Function was called more than once")
     spy.assertCalledOnce()
   }
+  
+  func testEmptyClosureWithParamAndReturn() {
+    let (spy, fn) = spy(emptyClosure(time(forTimezone:), result: 10))
+    let result = fn("PST")
+    XCTAssertEqual(result, 10)
+    spy.assertCalledOnce()
+  }
+}
+
+func time(forTimezone timezone: String) -> Int {
+  return 10
 }
 
 func pickUpBlock(blockPosition: Float, moveArm: (Float) -> Void = fireAndForgetRobotArm) {
