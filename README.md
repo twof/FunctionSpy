@@ -1,13 +1,12 @@
 # FunctionSpy
 
 ## Installation
-
+### SPM
 ```swift
 .package(url: "https://github.com/twof/FunctionSpy", .upToNextMajor(from: "1.0.0"))
 ```
 
 ## Usage
-
 FunctionSpy is a small library that provides a Spy for use in testing dependency injected functions.
 
 Imagine you have a function called `pickUpBlock` which when given the position of a block, will move a robotic arm if the position is past a certain threshhold. When you test this function, you don't want a real robotic arm to move, you just want to test the pure logic so you inject the robotic arm movement as a dependency.
@@ -62,3 +61,6 @@ public extension SpyProtocol {
 ```
 
 Feel free to open a PR if you'd like to add a helper function to the library!
+
+## Note from the developer
+When I started writing this, I thought I'd be able to use parameter packs, but they're very buggy as of Swift 5.9. (example [one](https://github.com/apple/swift/issues/69317), [two](https://github.com/apple/swift/issues/69313), [three](https://github.com/apple/swift/issues/69028)) Because of that, this library only supports functions with up to 4 parameters. If you need more, open an issue or a PR, and I'll be happy to add more overloads. For now I'm assuming [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it).
