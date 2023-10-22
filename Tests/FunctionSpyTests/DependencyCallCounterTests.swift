@@ -7,54 +7,55 @@ final class FunctionSpyTests: XCTestCase {
     let (counter, fn) = spy({ "Hello" })
     let reverseFact = try await reverseCatFact(getCatFact: fn)
     XCTAssertEqual(reverseFact, "olleH")
-    XCTAssertEqual(counter.count, 1)
+    XCTAssertEqual(counter.callCount, 1)
   }
   
-  func testSyncExample() {
-    let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArm))
+  func testMoveArmPastThreshold() {
+    let (armSpy, fn) = spy(emptyClosure(fireAndForgetRobotArm))
     pickUpBlock(blockPosition: 15, moveArm: fn)
-    XCTAssertEqual(counter.count, 1)
-    XCTAssertEqual(counter.callParams[0], 15.0 as Float)
-    
-    let (otherCounter, otherFn) = FunctionSpy.spy({(_: Float) in })
-    pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
-    XCTAssertEqual(otherCounter.count, 0)
-    XCTAssert(otherCounter.callParams.isEmpty)
+    XCTAssertEqual(armSpy.callCount, 1)
+    XCTAssertEqual(armSpy.callParams[0], 15.0 as Float)
+  }
+
+  func testMoveArmBeforeThreshold() {
+    let (armSpy, fn) = spy({(_: Float) in })
+    pickUpBlock(blockPosition: 14.9, moveArm: fn)
+    XCTAssertEqual(armSpy.callCount, 0)
   }
   
   func testSyncExampleB() {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmB))
     pickUpBlock(blockPosition: 15, moveArm: fn)
-    XCTAssertEqual(counter.count, 1)
+    XCTAssertEqual(counter.callCount, 1)
     XCTAssert(counter.callParams[0] == (15.0 as Float, ""))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmB))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
-    XCTAssertEqual(otherCounter.count, 0)
+    XCTAssertEqual(otherCounter.callCount, 0)
     XCTAssert(otherCounter.callParams.isEmpty)
   }
   
   func testSyncExampleC() {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmC))
     pickUpBlock(blockPosition: 15, moveArm: fn)
-    XCTAssertEqual(counter.count, 1)
+    XCTAssertEqual(counter.callCount, 1)
     XCTAssert(counter.callParams[0] == (15.0 as Float, "", FactResponse(fact: "")))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmC))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
-    XCTAssertEqual(otherCounter.count, 0)
+    XCTAssertEqual(otherCounter.callCount, 0)
     XCTAssert(otherCounter.callParams.isEmpty)
   }
   
   func testSyncExampleD() {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmD))
     pickUpBlock(blockPosition: 15, moveArm: fn)
-    XCTAssertEqual(counter.count, 1)
+    XCTAssertEqual(counter.callCount, 1)
     XCTAssert(counter.callParams[0] == (15.0 as Float, "", FactResponse(fact: ""), URL(string: "http://google.com")!))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmD))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
-    XCTAssertEqual(otherCounter.count, 0)
+    XCTAssertEqual(otherCounter.callCount, 0)
     XCTAssert(otherCounter.callParams.isEmpty)
   }
   
