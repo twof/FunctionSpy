@@ -1,3 +1,6 @@
+/// Wraps a function in a spy
+/// - Parameter closure: The function to wrap
+/// - Returns: The spy and and the wrapped function
 public func spy<Result>(
   _ closure: @escaping @Sendable () -> Result
 ) -> (Spy, @Sendable () -> Result) {
@@ -9,6 +12,9 @@ public func spy<Result>(
   })
 }
 
+/// Wraps a function in a spy
+/// - Parameter closure: The function to wrap
+/// - Returns: The spy and and the wrapped function
 public func spy<A, Result>(
   _ closure: @escaping @Sendable (A) -> Result
 ) -> (Spy1<A>, @Sendable (A) -> Result) {
@@ -20,6 +26,9 @@ public func spy<A, Result>(
   })
 }
 
+/// Wraps a function in a spy
+/// - Parameter closure: The function to wrap
+/// - Returns: The spy and and the wrapped function
 public func spy<A, B, Result>(
   _ closure: @escaping @Sendable (A, B) -> Result
 ) -> (Spy2<A, B>, @Sendable (A, B) -> Result) {
@@ -31,6 +40,9 @@ public func spy<A, B, Result>(
   })
 }
 
+/// Wraps a function in a spy
+/// - Parameter closure: The function to wrap
+/// - Returns: The spy and and the wrapped function
 public func spy<A, B, C, Result>(
   _ closure: @escaping @Sendable (A, B, C) -> Result
 ) -> (Spy3<A, B, C>, @Sendable (A, B, C) -> Result) {
@@ -42,6 +54,9 @@ public func spy<A, B, C, Result>(
   })
 }
 
+/// Wraps a function in a spy
+/// - Parameter closure: The function to wrap
+/// - Returns: The spy and and the wrapped function
 public func spy<A, B, C, D, Result>(
   _ closure: @escaping @Sendable (A, B, C, D) -> Result
 ) -> (Spy4<A, B, C, D>, @Sendable (A, B, C, D) -> Result) {

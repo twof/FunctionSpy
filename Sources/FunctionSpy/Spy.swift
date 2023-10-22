@@ -1,3 +1,4 @@
+/// Tracks function calls. See `SpyProtoco` for more.
 public class Spy: SpyProtocol {
   public private(set) var callCount = 0
   public private(set) var callParams: [()] = []
@@ -11,6 +12,7 @@ public class Spy: SpyProtocol {
   }
 }
 
+/// Tracks function calls. See `SpyProtoco` for more.
 public class Spy1<A>: SpyProtocol {
   public private(set) var callCount = 0
   public private(set) var callParams: [A] = []
@@ -24,6 +26,7 @@ public class Spy1<A>: SpyProtocol {
   }
 }
 
+/// Tracks function calls. See `SpyProtoco` for more.
 public class Spy2<A, B>: SpyProtocol {
   public private(set) var callCount = 0
   public private(set) var callParams: [(A, B)] = []
@@ -37,6 +40,7 @@ public class Spy2<A, B>: SpyProtocol {
   }
 }
 
+/// Tracks function calls. See `SpyProtoco` for more.
 public class Spy3<A, B, C>: SpyProtocol {
   public private(set) var callCount = 0
   public private(set) var callParams: [(A, B, C)] = []
@@ -50,6 +54,7 @@ public class Spy3<A, B, C>: SpyProtocol {
   }
 }
 
+/// Tracks function calls. See `SpyProtoco` for more.
 public class Spy4<A, B, C, D>: SpyProtocol {
   public private(set) var callCount = 0
   public private(set) var callParams: [(A, B, C, D)] = []
