@@ -23,5 +23,6 @@ let package = Package(
         .testTarget(
             name: "FunctionSpyTests",
             dependencies: ["FunctionSpy"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v6]
 )

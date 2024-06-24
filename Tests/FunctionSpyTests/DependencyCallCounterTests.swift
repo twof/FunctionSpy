@@ -87,10 +87,27 @@ final class FunctionSpyTests: XCTestCase {
     XCTAssertEqual(result, 10)
     spy.assertCalledOnce()
   }
+  
+  func testForDataRaces() async throws {
+    let count = 1_000_000
+    let (spy, fn) = spy(emptyClosure(time(forTimezone:), result: 10))
+    
+    await withTaskGroup(of: Void.self) { group in
+      for _ in (0..<count) {
+        group.addTask(priority: .background) {
+          _ = fn("PST")
+        }
+        
+        await group.waitForAll()
+      }
+    }
+    
+    XCTAssertEqual(spy.callCount, count)
+  }
 }
 
 func time(forTimezone timezone: String) -> Int {
-  return 10
+  return 15
 }
 
 func pickUpBlock(blockPosition: Float, moveArm: (Float) -> Void = fireAndForgetRobotArm) {
