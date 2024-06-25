@@ -3,7 +3,7 @@ import XCTest
 /// Tracks function calls.
 /// NOTE: This is not thread safe. Data races are possible during concurrent execution. Open an issue on the repo if you need thread
 /// safety.
-public protocol SpyProtocol {
+public protocol SpyProtocol: Actor {
   associatedtype Params
   
   /// Number of times the function was called

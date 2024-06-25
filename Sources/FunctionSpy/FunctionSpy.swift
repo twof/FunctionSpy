@@ -7,8 +7,11 @@ public func spy<each A, Result>(
   let spy = Spy<repeat each A>()
   
   return (spy, { (a: repeat each A) -> Result in
-    spy.increment()
-    spy.recordCall(repeat each a)
+    Task {
+      await spy.increment()
+      await spy.recordCall(repeat each a)
+    }
+    
     return closure(repeat each a)
   })
 }
@@ -22,8 +25,11 @@ public func spy<each A, Result>(
   let spy = Spy<repeat each A>()
   
   return (spy, { (a: repeat each A) throws -> Result in
-    spy.increment()
-    spy.recordCall(repeat each a)
+    Task {
+      await spy.increment()
+      await spy.recordCall(repeat each a)
+    }
+    
     return try closure(repeat each a)
   })
 }
@@ -37,8 +43,8 @@ public func spy<each A, Result>(
   let spy = Spy<repeat each A>()
   
   return (spy, { (a: repeat each A) async -> Result in
-    spy.increment()
-    spy.recordCall(repeat each a)
+    await spy.increment()
+    await spy.recordCall(repeat each a)
     return await closure(repeat each a)
   })
 }
@@ -53,8 +59,8 @@ public func spy<each A, Result>(
   let spy = Spy<repeat each A>()
   
   return (spy, { (a: repeat each A) async throws -> Result in
-    spy.increment()
-    spy.recordCall(repeat each a)
+    await spy.increment()
+    await spy.recordCall(repeat each a)
     return try await closure(repeat each a)
   })
 }
