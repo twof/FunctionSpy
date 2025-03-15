@@ -1,69 +1,32 @@
-/// Tracks function calls. See `SpyProtoco` for more.
-public class Spy: SpyProtocol {
-  public private(set) var callCount = 0
-  public private(set) var callParams: [()] = []
-  
-  func increment() {
-    self.callCount += 1
-  }
-  
-  func recordCall() {
-    self.callParams.append(())
-  }
-}
+import Foundation
 
-/// Tracks function calls. See `SpyProtoco` for more.
-public class Spy1<A>: SpyProtocol {
-  public private(set) var callCount = 0
-  public private(set) var callParams: [A] = []
+/// Tracks function calls. See `SpyProtocol` for more.
+final public class Spy<each A>: SpyProtocol, @unchecked Sendable {
+  private let lock = NSLock()
+  private var _callCount = 0
+  private var _callParams: [(repeat each A)] = []
+  
+  public var callCount: Int {
+    lock.lock()
+    defer { lock.unlock() }
+    return _callCount
+  }
+  
+  public var callParams: [(repeat each A)] {
+    lock.lock()
+    defer { lock.unlock() }
+    return _callParams
+  }
   
   func increment() {
-    self.callCount += 1
+    lock.lock()
+    defer { lock.unlock() }
+    _callCount += 1
   }
   
-  func recordCall(_ a: A) {
-    self.callParams.append(a)
-  }
-}
-
-/// Tracks function calls. See `SpyProtoco` for more.
-public class Spy2<A, B>: SpyProtocol {
-  public private(set) var callCount = 0
-  public private(set) var callParams: [(A, B)] = []
-  
-  func increment() {
-    self.callCount += 1
-  }
-  
-  func recordCall(_ a: A, _ b: B) {
-    self.callParams.append((a, b))
-  }
-}
-
-/// Tracks function calls. See `SpyProtoco` for more.
-public class Spy3<A, B, C>: SpyProtocol {
-  public private(set) var callCount = 0
-  public private(set) var callParams: [(A, B, C)] = []
-  
-  func increment() {
-    self.callCount += 1
-  }
-  
-  func recordCall(_ a: A, _ b: B, _ c: C) {
-    self.callParams.append((a, b, c))
-  }
-}
-
-/// Tracks function calls. See `SpyProtoco` for more.
-public class Spy4<A, B, C, D>: SpyProtocol {
-  public private(set) var callCount = 0
-  public private(set) var callParams: [(A, B, C, D)] = []
-  
-  func increment() {
-    self.callCount += 1
-  }
-  
-  func recordCall(_ a: A, _ b: B, _ c: C, _ d: D) {
-    self.callParams.append((a, b, c, d))
+  func recordCall(_ a: repeat each A) {
+    lock.lock()
+    defer { lock.unlock() }
+    _callParams.append((repeat each a))
   }
 }

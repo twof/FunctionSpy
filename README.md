@@ -61,6 +61,3 @@ public extension SpyProtocol {
 ```
 
 Feel free to open a PR if you'd like to add a helper function to the library!
-
-## Note from the developer
-When I started writing this, I thought I'd be able to use parameter packs, but they're very buggy as of Swift 5.9. (example [one](https://github.com/apple/swift/issues/69317), [two](https://github.com/apple/swift/issues/69313), [three](https://github.com/apple/swift/issues/69028)) Because of that, this library only supports functions with up to 4 parameters. If you need more, open an issue or a PR, and I'll be happy to add more overloads. For now I'm assuming [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it).
