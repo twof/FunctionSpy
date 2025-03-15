@@ -1,95 +1,107 @@
-import XCTest
 @testable import FunctionSpy
 import Foundation
+import Testing
 
-final class FunctionSpyTests: XCTestCase {
+struct FunctionSpyTests {
+  @Test
   func testRealisticAsyncThrowingExample() async throws {
     let (counter, fn) = spy({ "Hello" })
     let reverseFact = try await reverseCatFact(getCatFact: fn)
-    XCTAssertEqual(reverseFact, "olleH")
-    XCTAssertEqual(counter.callCount, 1)
+    #expect(reverseFact == "olleH")
+    #expect(counter.callCount == 1)
   }
   
+  @Test
   func testMoveArmPastThreshold() {
     let (armSpy, fn) = spy(emptyClosure(fireAndForgetRobotArm))
     pickUpBlock(blockPosition: 15, moveArm: fn)
-    XCTAssertEqual(armSpy.callCount, 1)
-    XCTAssertEqual(armSpy.callParams[0], 15.0 as Float)
+    #expect(armSpy.callCount == 1)
+    #expect(armSpy.callParams[0] == 15.0 as Float)
   }
 
+  @Test
   func testMoveArmBeforeThreshold() {
     let (armSpy, fn) = spy({(_: Float) in })
     pickUpBlock(blockPosition: 14.9, moveArm: fn)
-    XCTAssertEqual(armSpy.callCount, 0)
+    #expect(armSpy.callCount == 0)
   }
   
+  @Test
   func testSyncExampleB() {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmB))
     pickUpBlock(blockPosition: 15, moveArm: fn)
-    XCTAssertEqual(counter.callCount, 1)
-    XCTAssert(counter.callParams[0] == (15.0 as Float, ""))
+    #expect(counter.callCount == 1)
+    #expect(counter.callParams[0] == (15.0 as Float, ""))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmB))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
-    XCTAssertEqual(otherCounter.callCount, 0)
-    XCTAssert(otherCounter.callParams.isEmpty)
+    #expect(otherCounter.callCount == 0)
+    #expect(otherCounter.callParams.isEmpty)
   }
   
+  @Test
   func testSyncExampleC() {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmC))
     pickUpBlock(blockPosition: 15, moveArm: fn)
-    XCTAssertEqual(counter.callCount, 1)
-    XCTAssert(counter.callParams[0] == (15.0 as Float, "", FactResponse(fact: "")))
+    #expect(counter.callCount == 1)
+    #expect(counter.callParams[0] == (15.0 as Float, "", FactResponse(fact: "")))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmC))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
-    XCTAssertEqual(otherCounter.callCount, 0)
-    XCTAssert(otherCounter.callParams.isEmpty)
+    #expect(otherCounter.callCount == 0)
+    #expect(otherCounter.callParams.isEmpty)
   }
   
+  @Test
   func testSyncExampleD() {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmD))
     pickUpBlock(blockPosition: 15, moveArm: fn)
-    XCTAssertEqual(counter.callCount, 1)
-    XCTAssert(counter.callParams[0] == (15.0 as Float, "", FactResponse(fact: ""), URL(string: "http://google.com")!))
+    #expect(counter.callCount == 1)
+    #expect(counter.callParams[0] == (15.0 as Float, "", FactResponse(fact: ""), URL(string: "http://google.com")!))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmD))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
-    XCTAssertEqual(otherCounter.callCount, 0)
-    XCTAssert(otherCounter.callParams.isEmpty)
+    #expect(otherCounter.callCount == 0)
+    #expect(otherCounter.callParams.isEmpty)
   }
   
+  @Test
   func testAssertOnceNotCalled() async throws {
     let (spy, _) = spy({ })
-    
-    XCTExpectFailure("Function was not called")
-    spy.assertCalledOnce()
+    withKnownIssue("Function was not called") {
+      spy.assertCalledOnce()
+    }
   }
   
+  @Test
   func testAssertOnceCalled() async throws {
     let (spy, fn) = spy({ })
     fn()
     spy.assertCalledOnce()
   }
   
+  @Test
   func testAssertOnceCalledMore() async throws {
     let (spy, fn) = spy({ })
     fn()
     fn()
     
-    XCTExpectFailure("Function was called more than once")
-    spy.assertCalledOnce()
+    withKnownIssue("Function was called more than once") {
+      spy.assertCalledOnce()
+    }
   }
   
+  @Test
   func testEmptyClosureWithParamAndReturn() {
     let (spy, fn) = spy(emptyClosure(time(forTimezone:), result: 10))
     let result = fn("PST")
-    XCTAssertEqual(result, 10)
+    #expect(result == 10)
     spy.assertCalledOnce()
   }
   
+  @Test
   func testForDataRaces() async throws {
-    let count = 1_000_000
+    let count = 1000000
     let (spy, fn) = spy(emptyClosure(time(forTimezone:), result: 10))
     
     await withTaskGroup(of: Void.self) { group in
@@ -101,7 +113,7 @@ final class FunctionSpyTests: XCTestCase {
       await group.waitForAll()
     }
     
-    XCTAssertEqual(spy.callCount, count)
+    #expect(spy.callCount == count)
   }
 }
 
