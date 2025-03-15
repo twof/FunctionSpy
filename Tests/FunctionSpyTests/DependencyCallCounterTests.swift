@@ -97,9 +97,8 @@ final class FunctionSpyTests: XCTestCase {
         group.addTask(priority: .background) {
           _ = fn("PST")
         }
-        
-        await group.waitForAll()
       }
+      await group.waitForAll()
     }
     
     XCTAssertEqual(spy.callCount, count)

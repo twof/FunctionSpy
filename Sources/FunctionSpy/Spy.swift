@@ -1,28 +1,31 @@
+import Foundation
+
 /// Tracks function calls. See `SpyProtocol` for more.
 final public class Spy<each A>: SpyProtocol, @unchecked Sendable {
-  public private(set) var callCount = 0
-  public private(set) var callParams: [(repeat each A)] = []
+  private let callCountLock = NSLock()
+  private let callParamsLock = NSLock()
+  public var callCount: Int {
+    callCountLock.lock()
+    defer { callCountLock.unlock() }
+    return _callCount
+  }
+  public var callParams: [(repeat each A)] {
+    callParamsLock.lock()
+    defer { callParamsLock.unlock() }
+    return _callParams
+  }
+  private var _callCount = 0
+  private var _callParams: [(repeat each A)] = []
   
   func increment() {
-    self.callCount += 1
+    callCountLock.lock()
+    defer { callCountLock.unlock() }
+    self._callCount += 1
   }
   
   func recordCall(_ a: repeat each A) {
-    self.callParams.append((repeat each a))
+    callParamsLock.lock()
+    defer { callParamsLock.unlock() }
+    self._callParams.append((repeat each a))
   }
 }
-
-/// Tracks function calls. See `SpyProtocol` for more.
-public actor SpyActor<each A>: SpyActorProtocol {
-  public private(set) var callCount = 0
-  public private(set) var callParams: [(repeat each A)] = []
-  
-  func increment() {
-    self.callCount += 1
-  }
-  
-  func recordCall(_ a: repeat each A) {
-    self.callParams.append((repeat each a))
-  }
-}
-
