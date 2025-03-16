@@ -16,12 +16,12 @@ struct FunctionSpyTests {
     let (armSpy, fn) = spy(emptyClosure(fireAndForgetRobotArm))
     pickUpBlock(blockPosition: 15, moveArm: fn)
     #expect(armSpy.callCount == 1)
-    #expect(armSpy.callParams[0] == 15.0 as Float)
+    #expect(armSpy.callParams[0] == 15.0)
   }
 
   @Test
   func testMoveArmBeforeThreshold() {
-    let (armSpy, fn) = spy({(_: Float) in })
+    let (armSpy, fn) = spy({(_: Double) in })
     pickUpBlock(blockPosition: 14.9, moveArm: fn)
     #expect(armSpy.callCount == 0)
   }
@@ -31,7 +31,7 @@ struct FunctionSpyTests {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmB))
     pickUpBlock(blockPosition: 15, moveArm: fn)
     #expect(counter.callCount == 1)
-    #expect(counter.callParams[0] == (15.0 as Float, ""))
+    #expect(counter.callParams[0] == (15.0, ""))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmB))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
@@ -44,7 +44,7 @@ struct FunctionSpyTests {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmC))
     pickUpBlock(blockPosition: 15, moveArm: fn)
     #expect(counter.callCount == 1)
-    #expect(counter.callParams[0] == (15.0 as Float, "", FactResponse(fact: "")))
+    #expect(counter.callParams[0] == (15.0, "", FactResponse(fact: "")))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmC))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
@@ -57,7 +57,7 @@ struct FunctionSpyTests {
     let (counter, fn) = spy(emptyClosure(fireAndForgetRobotArmD))
     pickUpBlock(blockPosition: 15, moveArm: fn)
     #expect(counter.callCount == 1)
-    #expect(counter.callParams[0] == (15.0 as Float, "", FactResponse(fact: ""), URL(string: "http://google.com")!))
+    #expect(counter.callParams[0] == (15.0, "", FactResponse(fact: ""), URL(string: "http://google.com")!))
     
     let (otherCounter, otherFn) = FunctionSpy.spy(emptyClosure(fireAndForgetRobotArmD))
     pickUpBlock(blockPosition: 14.9, moveArm: otherFn)
@@ -121,43 +121,43 @@ func time(forTimezone timezone: String) -> Int {
   return 15
 }
 
-func pickUpBlock(blockPosition: Float, moveArm: (Float) -> Void = fireAndForgetRobotArm) {
+func pickUpBlock(blockPosition: Double, moveArm: (Double) -> Void = fireAndForgetRobotArm) {
   if blockPosition >= 15.0 {
     moveArm(blockPosition)
   }
 }
 
-func pickUpBlock(blockPosition: Float, moveArm: (Float, String) -> Void = fireAndForgetRobotArmB) {
+func pickUpBlock(blockPosition: Double, moveArm: (Double, String) -> Void = fireAndForgetRobotArmB) {
   if blockPosition >= 15.0 {
     moveArm(blockPosition, "")
   }
 }
 
-func pickUpBlock(blockPosition: Float, moveArm: (Float, String, FactResponse) -> Void = fireAndForgetRobotArmC) {
+func pickUpBlock(blockPosition: Double, moveArm: (Double, String, FactResponse) -> Void = fireAndForgetRobotArmC) {
   if blockPosition >= 15.0 {
     moveArm(blockPosition, "", FactResponse(fact: ""))
   }
 }
 
-func pickUpBlock(blockPosition: Float, moveArm: (Float, String, FactResponse, URL) -> Void = fireAndForgetRobotArmD) {
+func pickUpBlock(blockPosition: Double, moveArm: (Double, String, FactResponse, URL) -> Void = fireAndForgetRobotArmD) {
   if blockPosition >= 15.0 {
     moveArm(blockPosition, "", FactResponse(fact: ""), URL(string: "http://google.com")!)
   }
 }
 
-func fireAndForgetRobotArm(position: Float) {
+func fireAndForgetRobotArm(position: Double) {
   print("arm moved")
 }
 
-func fireAndForgetRobotArmB(position: Float, b: String) {
+func fireAndForgetRobotArmB(position: Double, b: String) {
   print("arm moved")
 }
 
-func fireAndForgetRobotArmC(position: Float, b: String, c: FactResponse) {
+func fireAndForgetRobotArmC(position: Double, b: String, c: FactResponse) {
   print("arm moved")
 }
 
-func fireAndForgetRobotArmD(position: Float, b: String, c: FactResponse, d: URL) {
+func fireAndForgetRobotArmD(position: Double, b: String, c: FactResponse, d: URL) {
   print("arm moved")
 }
 
