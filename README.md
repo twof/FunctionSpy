@@ -40,7 +40,7 @@ Since you usually just want to mock in an empty closure or a closure that just r
 
 ```swift
 func testMoveArmPastThreshold() {
-  let (armSpy, fn) = spy(emtpyClosure(moveArm))
+  let (armSpy, fn) = spy(emptyClosure(moveArm))
   pickUpBlock(blockPosition: 15, moveArm: fn)
   XCTAssertEqual(armSpy.callCount, 1)
   XCTAssertEqual(armSpy.callParams[0], 15.0 as Float)
